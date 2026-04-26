@@ -18,7 +18,6 @@ class LandingScreen extends StatelessWidget {
               _buildStatsSection(context),
               _buildAdvantagesSection(context),
               _buildHowItWorksSection(context),
-              _buildCtaSection(context),
               const SizedBox(height: 24),
             ],
           ),
@@ -67,21 +66,18 @@ class LandingScreen extends StatelessWidget {
           colors: [Color(0xFF87CEEB), Color(0xFF4DA8DA)],
         ),
       ),
-      child: Stack(
+      child: Column(
         children: [
-          Positioned(
-            right: -20,
-            bottom: 0,
-            child: Image.asset(
-              'assets/images/students.png',
-              height: 300,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) =>
-                  const SizedBox(height: 300),
-            ),
+          Image.asset(
+            'assets/images/students.png',
+            width: double.infinity,
+            height: 220,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) =>
+                const SizedBox(height: 220),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 40, 24, 40),
+            padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,38 +89,42 @@ class LandingScreen extends StatelessWidget {
                         height: 1.3,
                       ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 Text(
                   'Экономьте время: Разместите задание, и эксперт быстро поможет с консультацией',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withValues(alpha: 0.9),
                       ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 Row(
                   children: [
-                    FilledButton(
-                      onPressed: () => context.go(AppRoutes.register),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.orange,
-                        foregroundColor: AppColors.grey700,
-                        minimumSize: Size.zero,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 28, vertical: 16),
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () => context.go(AppRoutes.register),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.orange,
+                          foregroundColor: AppColors.grey700,
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 16),
+                        ),
+                        child: const Text('Разместить задание'),
                       ),
-                      child: const Text('Разместить задание'),
                     ),
                     const SizedBox(width: 12),
-                    OutlinedButton(
-                      onPressed: () => context.go(AppRoutes.register),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        side: const BorderSide(color: Colors.white),
-                        minimumSize: Size.zero,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 28, vertical: 16),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => context.go(AppRoutes.register),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.white),
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 16),
+                        ),
+                        child: const Text('Стать экспертом'),
                       ),
-                      child: const Text('Стать экспертом'),
                     ),
                   ],
                 ),
@@ -385,60 +385,4 @@ class LandingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCtaSection(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF87CEEB), Color(0xFF4DA8DA)],
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            children: [
-              Text(
-                'Для заказчика',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-              ),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () => context.go(AppRoutes.register),
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.orange,
-                  foregroundColor: AppColors.grey700,
-                ),
-                child: const Text('Разместить задание'),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'Для экспертов',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton(
-                onPressed: () => context.go(AppRoutes.register),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.white),
-                ),
-                child: const Text('Стать экспертом'),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }

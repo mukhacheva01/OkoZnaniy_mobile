@@ -55,39 +55,27 @@ class _LoginScreenState extends State<LoginScreen>
     return Scaffold(
       body: Column(
         children: [
-          // Hero image at top
-          Container(
-            height: 200,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF3A7BD5), Color(0xFF00D2FF)],
-              ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  right: 16,
-                  bottom: 0,
-                  child: Image.asset(
-                    'assets/images/students.png',
-                    height: 180,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const SizedBox.shrink(),
-                  ),
-                ),
-                Positioned(
-                  top: 48,
-                  left: 16,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+          // Back button
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () => context.go('/'),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Text(
+                    'Око Знаний',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -121,26 +109,18 @@ class _LoginScreenState extends State<LoginScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                // Register tab
-                SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      Text(
-                        'Создайте аккаунт',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () => context.go(AppRoutes.register),
-                        child: const Text('Перейти к регистрации'),
-                      ),
-                    ],
-                  ),
+                // Register tab — navigate immediately
+                Builder(
+                  builder: (context) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (_tabController.index == 0) {
+                        context.go(AppRoutes.register);
+                      }
+                    });
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
                 ),
 
                 // Login tab

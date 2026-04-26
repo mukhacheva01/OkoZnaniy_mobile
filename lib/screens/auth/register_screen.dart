@@ -71,44 +71,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final authProvider = context.watch<AuthProvider>();
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go(AppRoutes.login),
+        ),
+        title: Text(
+          'Око Знаний',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+        ),
+      ),
       body: Column(
         children: [
-          // Hero image
-          Container(
-            height: 200,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF3A7BD5), Color(0xFF00D2FF)],
-              ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  right: 16,
-                  bottom: 0,
-                  child: Image.asset(
-                    'assets/images/students.png',
-                    height: 180,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const SizedBox.shrink(),
-                  ),
-                ),
-                Positioned(
-                  top: 48,
-                  left: 16,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => context.go(AppRoutes.landing),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           // Content
           Expanded(
             child: SingleChildScrollView(
