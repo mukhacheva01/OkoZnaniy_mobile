@@ -99,6 +99,25 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void loginAsTestUser() {
+    _user = User(
+      id: 0,
+      email: 'test@okoznaniy.ru',
+      username: 'Тестовый пользователь',
+      firstName: 'Иван',
+      lastName: 'Иванов',
+      role: 'client',
+      balance: 1500,
+      isExpert: false,
+      isPartner: false,
+      referralCode: 'TEST123',
+      rating: 4.8,
+      completedOrders: 12,
+    );
+    _error = null;
+    notifyListeners();
+  }
+
   void clearError() {
     _error = null;
     notifyListeners();

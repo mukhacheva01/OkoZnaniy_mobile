@@ -253,6 +253,24 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ],
                         ),
+                        const SizedBox(height: 32),
+                        const Divider(),
+                        const SizedBox(height: 16),
+                        OutlinedButton.icon(
+                          onPressed: () {
+                            context
+                                .read<AuthProvider>()
+                                .loginAsTestUser();
+                            context.go(AppRoutes.home);
+                          },
+                          icon: const Icon(Icons.person_outline),
+                          label: const Text('Тестовый пользователь'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            side: const BorderSide(color: AppColors.primary),
+                            minimumSize: const Size(double.infinity, 48),
+                          ),
+                        ),
                       ],
                     ),
                   ),
