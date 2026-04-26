@@ -10,11 +10,13 @@ class AuthProvider extends ChangeNotifier {
   User? _user;
   bool _isLoading = false;
   String? _error;
+  bool _isTestUser = false;
 
   User? get user => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get isAuthenticated => _user != null;
+  bool get isTestUser => _isTestUser;
   String get userRole => _user?.role ?? 'client';
 
   Future<void> init() async {
@@ -72,6 +74,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> fetchUser() async {
+    if (_isTestUser) return;
     try {
       _user = await _authService.getMe();
       notifyListeners();
@@ -82,6 +85,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> updateProfile(Map<String, dynamic> data) async {
+    if (_isTestUser) return;
     _isLoading = true;
     notifyListeners();
     try {
@@ -94,12 +98,16 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _authService.logout();
+    if (!_isTestUser) {
+      await _authService.logout();
+    }
     _user = null;
+    _isTestUser = false;
     notifyListeners();
   }
 
   void loginAsTestUser() {
+    _isTestUser = true;
     _user = User(
       id: 0,
       email: 'test@okoznaniy.ru',
