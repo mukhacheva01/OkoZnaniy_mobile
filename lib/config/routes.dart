@@ -24,6 +24,17 @@ import 'package:oko_znaniy_mobile/screens/expert/become_expert_screen.dart';
 import 'package:oko_znaniy_mobile/screens/expert/expert_application_screen.dart';
 import 'package:oko_znaniy_mobile/screens/expert/expert_search_screen.dart';
 import 'package:oko_znaniy_mobile/screens/expert/expert_profile_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/edit_expert_profile_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_application_view_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/specializations_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/available_orders_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_works_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_bids_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_reviews_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/documents_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_arbitration_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_finance_screen.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_shop_works_screen.dart';
 import 'package:oko_znaniy_mobile/screens/partner/partner_dashboard_screen.dart';
 import 'package:oko_znaniy_mobile/screens/partner/become_partner_screen.dart';
 import 'package:oko_znaniy_mobile/screens/knowledge/knowledge_portal_screen.dart';
@@ -70,6 +81,17 @@ class AppRoutes {
   static const String finance = '/finance';
   static const String friends = '/friends';
   static const String reviews = '/reviews';
+  static const String editExpertProfile = '/expert-profile/edit';
+  static const String expertApplicationView = '/expert-application-view';
+  static const String specializations = '/specializations';
+  static const String availableOrders = '/available-orders';
+  static const String expertWorks = '/expert-works';
+  static const String expertBids = '/expert-bids';
+  static const String expertReviews = '/expert-reviews';
+  static const String expertDocuments = '/expert-documents';
+  static const String expertArbitration = '/expert-arbitration';
+  static const String expertFinance = '/expert-finance';
+  static const String expertShopWorks = '/expert-shop-works';
 
   static GoRouter router(AuthProvider authProvider) {
     return GoRouter(
@@ -175,6 +197,17 @@ class AppRoutes {
         GoRoute(path: finance, builder: (context, state) => const FinanceScreen()),
         GoRoute(path: friends, builder: (context, state) => const FriendsScreen()),
         GoRoute(path: reviews, builder: (context, state) => const ReviewsScreen()),
+        GoRoute(path: editExpertProfile, builder: (context, state) => const EditExpertProfileScreen()),
+        GoRoute(path: expertApplicationView, builder: (context, state) => const ExpertApplicationViewScreen()),
+        GoRoute(path: specializations, builder: (context, state) => const SpecializationsScreen()),
+        GoRoute(path: availableOrders, builder: (context, state) => const AvailableOrdersScreen()),
+        GoRoute(path: expertWorks, builder: (context, state) => const ExpertWorksScreen()),
+        GoRoute(path: expertBids, builder: (context, state) => const ExpertBidsScreen()),
+        GoRoute(path: expertReviews, builder: (context, state) => const ExpertReviewsScreen()),
+        GoRoute(path: expertDocuments, builder: (context, state) => const DocumentsScreen()),
+        GoRoute(path: expertArbitration, builder: (context, state) => const ExpertArbitrationScreen()),
+        GoRoute(path: expertFinance, builder: (context, state) => const ExpertFinanceScreen()),
+        GoRoute(path: expertShopWorks, builder: (context, state) => const ExpertShopWorksScreen()),
       ],
     );
   }

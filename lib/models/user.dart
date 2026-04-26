@@ -18,6 +18,17 @@ class User {
   final int totalOrders;
   final double totalSpent;
   final bool emailVerified;
+  // Expert-specific fields
+  final String? bio;
+  final String? education;
+  final int experienceYears;
+  final double hourlyRate;
+  final List<String> skills;
+  final String? portfolioUrl;
+  final String verificationStatus; // 'none', 'pending', 'verified', 'rejected'
+  final double totalEarnings;
+  final int totalReviews;
+  final String avgResponseTime;
 
   User({
     required this.id,
@@ -39,6 +50,16 @@ class User {
     this.totalOrders = 0,
     this.totalSpent = 0,
     this.emailVerified = false,
+    this.bio,
+    this.education,
+    this.experienceYears = 0,
+    this.hourlyRate = 0,
+    this.skills = const [],
+    this.portfolioUrl,
+    this.verificationStatus = 'none',
+    this.totalEarnings = 0,
+    this.totalReviews = 0,
+    this.avgResponseTime = '',
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -62,6 +83,16 @@ class User {
       totalOrders: json['total_orders'] as int? ?? 0,
       totalSpent: (json['total_spent'] as num?)?.toDouble() ?? 0,
       emailVerified: json['email_verified'] as bool? ?? false,
+      bio: json['bio'] as String?,
+      education: json['education'] as String?,
+      experienceYears: json['experience_years'] as int? ?? 0,
+      hourlyRate: (json['hourly_rate'] as num?)?.toDouble() ?? 0,
+      skills: (json['skills'] as List<dynamic>?)?.cast<String>() ?? [],
+      portfolioUrl: json['portfolio_url'] as String?,
+      verificationStatus: json['verification_status'] as String? ?? 'none',
+      totalEarnings: (json['total_earnings'] as num?)?.toDouble() ?? 0,
+      totalReviews: json['total_reviews'] as int? ?? 0,
+      avgResponseTime: json['avg_response_time'] as String? ?? '',
     );
   }
 

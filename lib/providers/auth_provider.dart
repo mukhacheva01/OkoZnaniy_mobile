@@ -150,6 +150,16 @@ class AuthProvider extends ChangeNotifier {
       totalOrders: isExpert ? 180 : 12,
       totalSpent: isExpert ? 0 : 42500,
       emailVerified: true,
+      bio: isExpert ? 'Кандидат экономических наук, преподаватель вуза с 10-летним стажем. Специализируюсь на экономике, менеджменте и финансовом анализе.' : null,
+      education: isExpert ? 'МГУ им. Ломоносова, Экономический факультет, 2014' : null,
+      experienceYears: isExpert ? 10 : 0,
+      hourlyRate: isExpert ? 1500 : 0,
+      skills: isExpert ? ['Экономика', 'Менеджмент', 'Финансовый анализ', 'Бухгалтерский учёт', 'Статистика'] : [],
+      portfolioUrl: isExpert ? 'https://portfolio.example.com/petrov' : null,
+      verificationStatus: isExpert ? 'verified' : 'none',
+      totalEarnings: isExpert ? 485000 : 0,
+      totalReviews: isExpert ? 142 : 0,
+      avgResponseTime: isExpert ? '15 мин' : '',
     );
     _error = null;
     notifyListeners();

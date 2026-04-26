@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:oko_znaniy_mobile/config/theme.dart';
 import 'package:oko_znaniy_mobile/config/routes.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
+import 'package:oko_znaniy_mobile/screens/expert/expert_own_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -12,6 +13,10 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
     final user = authProvider.user;
+
+    if (user?.isExpert ?? false) {
+      return const ExpertOwnProfileScreen();
+    }
 
     return Scaffold(
       appBar: AppBar(

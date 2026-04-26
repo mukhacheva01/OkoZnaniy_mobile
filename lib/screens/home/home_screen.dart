@@ -16,7 +16,8 @@ class HomeScreen extends StatelessWidget {
     final testData = context.watch<TestDataProvider>();
     final user = authProvider.user;
     final isTest = authProvider.isTestUser;
-    final orders = isTest ? testData.orders.take(3).toList() : [];
+    final isExpert = user?.isExpert ?? false;
+    final orders = isTest ? (isExpert ? testData.expertOrders.take(3).toList() : testData.orders.take(3).toList()) : [];
     final unreadNotifications = isTest ? testData.notifications.where((n) => !n.isRead).length : 0;
 
     return Scaffold(
@@ -96,7 +97,14 @@ class HomeScreen extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                children: [
+                children: isExpert ? [
+                  _buildQuickAction(context, Icons.search, 'Найти заказы', AppColors.primary, () => context.push(AppRoutes.availableOrders)),
+                  _buildQuickAction(context, Icons.assignment, 'Мои работы', AppColors.success, () => context.push(AppRoutes.expertWorks)),
+                  _buildQuickAction(context, Icons.how_to_vote, 'Мои ставки', AppColors.orange, () => context.push(AppRoutes.expertBids)),
+                  _buildQuickAction(context, Icons.account_balance_wallet, 'Финансы', AppColors.success, () => context.push(AppRoutes.expertFinance)),
+                  _buildQuickAction(context, Icons.people_outline, 'Друзья', AppColors.purple, () => context.push(AppRoutes.friends)),
+                  _buildQuickAction(context, Icons.support_agent, 'Поддержка', AppColors.primary, () => context.push(AppRoutes.supportCenter)),
+                ] : [
                   _buildQuickAction(context, Icons.add_circle_outline, 'Новый заказ', AppColors.primary, () => context.push(AppRoutes.createOrder)),
                   _buildQuickAction(context, Icons.account_balance_wallet, 'Финансы', AppColors.success, () => context.push(AppRoutes.finance)),
                   _buildQuickAction(context, Icons.people_outline, 'Друзья', AppColors.orange, () => context.push(AppRoutes.friends)),
@@ -113,9 +121,9 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Text('Мои заказы', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                  Text(isExpert ? 'Мои работы' : 'Мои заказы', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                   const Spacer(),
-                  TextButton(onPressed: () => context.go(AppRoutes.myWorks), child: const Text('Все')),
+                  TextButton(onPressed: () => context.go(isExpert ? AppRoutes.expertWorks : AppRoutes.myWorks), child: const Text('Все')),
                 ],
               ),
             ),
