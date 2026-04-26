@@ -106,6 +106,16 @@ class AuthProvider extends ChangeNotifier {
         totalOrders: _user!.totalOrders,
         totalSpent: _user!.totalSpent,
         emailVerified: _user!.emailVerified,
+        bio: _user!.bio,
+        education: _user!.education,
+        experienceYears: _user!.experienceYears,
+        hourlyRate: _user!.hourlyRate,
+        skills: _user!.skills,
+        portfolioUrl: _user!.portfolioUrl,
+        verificationStatus: _user!.verificationStatus,
+        totalEarnings: _user!.totalEarnings,
+        totalReviews: _user!.totalReviews,
+        avgResponseTime: _user!.avgResponseTime,
       );
       notifyListeners();
       return;
