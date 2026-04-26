@@ -656,7 +656,7 @@ class TestDataProvider extends ChangeNotifier {
     final index = _orders.indexWhere((o) => o.id == bid.orderId);
     if (index != -1) {
       final old = _orders[index];
-      _orders[index] = Order(id: old.id, title: old.title, description: old.description, workType: old.workType, subject: old.subject, status: 'in_progress', price: bid.price, deadline: old.deadline, createdAt: old.createdAt, clientId: old.clientId, clientName: old.clientName, expertId: bid.expertId, expertName: bid.expertName, filesCount: old.filesCount, commentsCount: old.commentsCount, bidsCount: old.bidsCount);
+      _orders[index] = Order(id: old.id, title: old.title, description: old.description, workType: old.workType, subject: old.subject, status: 'in_progress', price: bid.price, budget: old.budget, deadline: old.deadline, createdAt: old.createdAt, clientId: old.clientId, clientName: old.clientName, expertId: bid.expertId, expertName: bid.expertName, filesCount: old.filesCount, commentsCount: old.commentsCount, bidsCount: old.bidsCount);
     }
     _bids.removeWhere((b) => b.orderId == bid.orderId && b.id != bid.id);
     notifyListeners();

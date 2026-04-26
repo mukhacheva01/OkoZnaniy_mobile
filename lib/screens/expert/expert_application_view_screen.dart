@@ -55,7 +55,7 @@ class _ExpertApplicationViewScreenState extends State<ExpertApplicationViewScree
     final authProvider = context.watch<AuthProvider>();
     final application = testData.expertApplication;
 
-    if (application == null && !authProvider.isTestUser) {
+    if (application == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Анкета эксперта')),
         body: Center(
