@@ -63,6 +63,12 @@ class _EditExpertProfileScreenState extends State<EditExpertProfileScreen> {
       'last_name': _lastNameController.text,
       'email': _emailController.text,
       'phone': _phoneController.text,
+      'bio': _bioController.text,
+      'education': _educationController.text,
+      'experience_years': int.tryParse(_experienceController.text) ?? 0,
+      'hourly_rate': double.tryParse(_hourlyRateController.text) ?? 0,
+      'skills': _skillsController.text.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList(),
+      'portfolio_url': _portfolioController.text,
     });
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Профиль обновлён')));

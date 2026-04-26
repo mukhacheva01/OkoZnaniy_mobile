@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                     )
                   else if (user?.role == 'expert')
                     FilledButton(
-                      onPressed: () => context.go(AppRoutes.ordersFeed),
+                      onPressed: () => context.push(AppRoutes.availableOrders),
                       style: FilledButton.styleFrom(backgroundColor: AppColors.orange, foregroundColor: AppColors.grey700),
                       child: const Text('Найти заказы'),
                     ),
@@ -123,7 +123,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(isExpert ? 'Мои работы' : 'Мои заказы', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                   const Spacer(),
-                  TextButton(onPressed: () => context.go(isExpert ? AppRoutes.expertWorks : AppRoutes.myWorks), child: const Text('Все')),
+                  TextButton(onPressed: () => context.push(isExpert ? AppRoutes.expertWorks : AppRoutes.myWorks), child: const Text('Все')),
                 ],
               ),
             ),
