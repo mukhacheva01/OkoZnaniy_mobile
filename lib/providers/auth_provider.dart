@@ -123,21 +123,22 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loginAsTestUser() {
+  void loginAsTestUser({String role = 'client'}) {
     _isTestUser = true;
+    final isExpert = role == 'expert';
     _user = User(
       id: 0,
-      email: 'test@okoznaniy.ru',
-      username: 'Тестовый пользователь',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      role: 'client',
-      balance: 1500,
-      isExpert: false,
+      email: isExpert ? 'expert@okoznaniy.ru' : 'client@okoznaniy.ru',
+      username: isExpert ? 'Тестовый эксперт' : 'Тестовый клиент',
+      firstName: isExpert ? 'Алексей' : 'Иван',
+      lastName: isExpert ? 'Петров' : 'Иванов',
+      role: role,
+      balance: isExpert ? 8500 : 1500,
+      isExpert: isExpert,
       isPartner: false,
       referralCode: 'TEST123',
-      rating: 4.8,
-      completedOrders: 12,
+      rating: isExpert ? 4.9 : 4.8,
+      completedOrders: isExpert ? 156 : 12,
     );
     _error = null;
     notifyListeners();
