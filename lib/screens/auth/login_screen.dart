@@ -253,6 +253,48 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                           ],
                         ),
+                        const SizedBox(height: 32),
+                        const Divider(),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context
+                                      .read<AuthProvider>()
+                                      .loginAsTestUser(role: 'client');
+                                  context.go(AppRoutes.home);
+                                },
+                                icon: const Icon(Icons.person_outline),
+                                label: const Text('Клиент'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: AppColors.primary,
+                                  side: const BorderSide(color: AppColors.primary),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context
+                                      .read<AuthProvider>()
+                                      .loginAsTestUser(role: 'expert');
+                                  context.go(AppRoutes.home);
+                                },
+                                icon: const Icon(Icons.school_outlined),
+                                label: const Text('Эксперт'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFFFFB34A),
+                                  side: const BorderSide(color: Color(0xFFFFB34A)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

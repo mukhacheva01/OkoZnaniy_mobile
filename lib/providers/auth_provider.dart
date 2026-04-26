@@ -10,11 +10,13 @@ class AuthProvider extends ChangeNotifier {
   User? _user;
   bool _isLoading = false;
   String? _error;
+  bool _isTestUser = false;
 
   User? get user => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get isAuthenticated => _user != null;
+  bool get isTestUser => _isTestUser;
   String get userRole => _user?.role ?? 'client';
 
   Future<void> init() async {
@@ -72,6 +74,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> fetchUser() async {
+    if (_isTestUser) return;
     try {
       _user = await _authService.getMe();
       notifyListeners();
@@ -82,6 +85,26 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> updateProfile(Map<String, dynamic> data) async {
+    if (_isTestUser) {
+      _user = User(
+        id: _user!.id,
+        email: data['email'] as String? ?? _user!.email,
+        username: _user!.username,
+        firstName: data['first_name'] as String? ?? _user!.firstName,
+        lastName: data['last_name'] as String? ?? _user!.lastName,
+        role: _user!.role,
+        avatar: _user!.avatar,
+        phone: data['phone'] as String? ?? _user!.phone,
+        balance: _user!.balance,
+        isExpert: _user!.isExpert,
+        isPartner: _user!.isPartner,
+        referralCode: _user!.referralCode,
+        rating: _user!.rating,
+        completedOrders: _user!.completedOrders,
+      );
+      notifyListeners();
+      return;
+    }
     _isLoading = true;
     notifyListeners();
     try {
@@ -96,6 +119,28 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout() async {
     await _authService.logout();
     _user = null;
+    _isTestUser = false;
+    notifyListeners();
+  }
+
+  void loginAsTestUser({String role = 'client'}) {
+    _isTestUser = true;
+    final isExpert = role == 'expert';
+    _user = User(
+      id: 0,
+      email: isExpert ? 'expert@okoznaniy.ru' : 'client@okoznaniy.ru',
+      username: isExpert ? 'Тестовый эксперт' : 'Тестовый клиент',
+      firstName: isExpert ? 'Алексей' : 'Иван',
+      lastName: isExpert ? 'Петров' : 'Иванов',
+      role: role,
+      balance: isExpert ? 8500 : 1500,
+      isExpert: isExpert,
+      isPartner: false,
+      referralCode: 'TEST123',
+      rating: isExpert ? 4.9 : 4.8,
+      completedOrders: isExpert ? 156 : 12,
+    );
+    _error = null;
     notifyListeners();
   }
 
