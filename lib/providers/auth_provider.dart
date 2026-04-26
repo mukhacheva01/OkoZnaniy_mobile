@@ -96,11 +96,16 @@ class AuthProvider extends ChangeNotifier {
         avatar: _user!.avatar,
         phone: data['phone'] as String? ?? _user!.phone,
         balance: _user!.balance,
+        frozenBalance: _user!.frozenBalance,
         isExpert: _user!.isExpert,
         isPartner: _user!.isPartner,
         referralCode: _user!.referralCode,
         rating: _user!.rating,
         completedOrders: _user!.completedOrders,
+        activeOrders: _user!.activeOrders,
+        totalOrders: _user!.totalOrders,
+        totalSpent: _user!.totalSpent,
+        emailVerified: _user!.emailVerified,
       );
       notifyListeners();
       return;
@@ -133,12 +138,18 @@ class AuthProvider extends ChangeNotifier {
       firstName: isExpert ? 'Алексей' : 'Иван',
       lastName: isExpert ? 'Петров' : 'Иванов',
       role: role,
+      phone: '+7 (999) 123-45-67',
       balance: isExpert ? 8500 : 1500,
+      frozenBalance: isExpert ? 0 : 3500,
       isExpert: isExpert,
       isPartner: false,
       referralCode: 'TEST123',
       rating: isExpert ? 4.9 : 4.8,
-      completedOrders: isExpert ? 156 : 12,
+      completedOrders: isExpert ? 156 : 8,
+      activeOrders: isExpert ? 5 : 3,
+      totalOrders: isExpert ? 180 : 12,
+      totalSpent: isExpert ? 0 : 42500,
+      emailVerified: true,
     );
     _error = null;
     notifyListeners();

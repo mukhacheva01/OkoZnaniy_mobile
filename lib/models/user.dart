@@ -8,11 +8,16 @@ class User {
   final String? avatar;
   final String? phone;
   final double balance;
+  final double frozenBalance;
   final bool isExpert;
   final bool isPartner;
   final String? referralCode;
   final double rating;
   final int completedOrders;
+  final int activeOrders;
+  final int totalOrders;
+  final double totalSpent;
+  final bool emailVerified;
 
   User({
     required this.id,
@@ -24,11 +29,16 @@ class User {
     this.avatar,
     this.phone,
     this.balance = 0,
+    this.frozenBalance = 0,
     this.isExpert = false,
     this.isPartner = false,
     this.referralCode,
     this.rating = 0,
     this.completedOrders = 0,
+    this.activeOrders = 0,
+    this.totalOrders = 0,
+    this.totalSpent = 0,
+    this.emailVerified = false,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -42,11 +52,16 @@ class User {
       avatar: json['avatar'] as String?,
       phone: json['phone'] as String?,
       balance: (json['balance'] as num?)?.toDouble() ?? 0,
+      frozenBalance: (json['frozen_balance'] as num?)?.toDouble() ?? 0,
       isExpert: json['is_expert'] as bool? ?? false,
       isPartner: json['is_partner'] as bool? ?? false,
       referralCode: json['referral_code'] as String?,
       rating: (json['rating'] as num?)?.toDouble() ?? 0,
       completedOrders: json['completed_orders'] as int? ?? 0,
+      activeOrders: json['active_orders'] as int? ?? 0,
+      totalOrders: json['total_orders'] as int? ?? 0,
+      totalSpent: (json['total_spent'] as num?)?.toDouble() ?? 0,
+      emailVerified: json['email_verified'] as bool? ?? false,
     );
   }
 
@@ -61,6 +76,7 @@ class User {
       'avatar': avatar,
       'phone': phone,
       'balance': balance,
+      'frozen_balance': frozenBalance,
       'is_expert': isExpert,
       'is_partner': isPartner,
       'referral_code': referralCode,
@@ -73,4 +89,8 @@ class User {
     }
     return username;
   }
+
+  double get avgOrderCost => totalOrders > 0 ? totalSpent / totalOrders : 0;
+  double get successRate =>
+      totalOrders > 0 ? (completedOrders / totalOrders) * 100 : 0;
 }

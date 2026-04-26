@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:oko_znaniy_mobile/config/theme.dart';
 import 'package:oko_znaniy_mobile/config/routes.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
+import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -261,9 +262,8 @@ class _LoginScreenState extends State<LoginScreen>
                             Expanded(
                               child: OutlinedButton.icon(
                                 onPressed: () {
-                                  context
-                                      .read<AuthProvider>()
-                                      .loginAsTestUser(role: 'client');
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'client');
+                                  context.read<TestDataProvider>().initTestData();
                                   context.go(AppRoutes.home);
                                 },
                                 icon: const Icon(Icons.person_outline),
@@ -279,9 +279,8 @@ class _LoginScreenState extends State<LoginScreen>
                             Expanded(
                               child: OutlinedButton.icon(
                                 onPressed: () {
-                                  context
-                                      .read<AuthProvider>()
-                                      .loginAsTestUser(role: 'expert');
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'expert');
+                                  context.read<TestDataProvider>().initTestData();
                                   context.go(AppRoutes.home);
                                 },
                                 icon: const Icon(Icons.school_outlined),
