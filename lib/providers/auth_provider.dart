@@ -117,9 +117,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    if (!_isTestUser) {
-      await _authService.logout();
-    }
+    await _authService.logout();
     _user = null;
     _isTestUser = false;
     notifyListeners();
