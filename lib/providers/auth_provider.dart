@@ -85,7 +85,26 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> updateProfile(Map<String, dynamic> data) async {
-    if (_isTestUser) return;
+    if (_isTestUser) {
+      _user = User(
+        id: _user!.id,
+        email: data['email'] as String? ?? _user!.email,
+        username: _user!.username,
+        firstName: data['first_name'] as String? ?? _user!.firstName,
+        lastName: data['last_name'] as String? ?? _user!.lastName,
+        role: _user!.role,
+        avatar: _user!.avatar,
+        phone: data['phone'] as String? ?? _user!.phone,
+        balance: _user!.balance,
+        isExpert: _user!.isExpert,
+        isPartner: _user!.isPartner,
+        referralCode: _user!.referralCode,
+        rating: _user!.rating,
+        completedOrders: _user!.completedOrders,
+      );
+      notifyListeners();
+      return;
+    }
     _isLoading = true;
     notifyListeners();
     try {
