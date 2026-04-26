@@ -11,41 +11,66 @@ class BecomeExpertScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Стать экспертом')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(Icons.school, size: 80, color: AppColors.primary),
-            const SizedBox(height: 24),
-            Text(
-              'Присоединяйтесь к команде экспертов',
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
+            // Hero
+            Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                gradient: AppColors.primaryGradient,
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.school, size: 64, color: Colors.white),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Присоединяйтесь к команде экспертов',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Зарабатывайте, помогая студентам с учебными работами',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 16),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              'Зарабатывайте, помогая студентам с учебными работами',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
-            ),
-            const SizedBox(height: 32),
 
-            _buildBenefit(context, Icons.attach_money, 'Достойная оплата',
-                'Устанавливайте свои цены за работу'),
-            _buildBenefit(context, Icons.schedule, 'Гибкий график',
-                'Работайте когда удобно, откуда удобно'),
-            _buildBenefit(context, Icons.trending_up, 'Карьерный рост',
-                'Развивайте навыки и повышайте рейтинг'),
-            _buildBenefit(context, Icons.shield, 'Безопасные сделки',
-                'Гарантия оплаты через платформу'),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  _buildBenefit(context, Icons.attach_money,
+                      'Достойная оплата', 'Устанавливайте свои цены за работу',
+                      AppColors.orange),
+                  _buildBenefit(context, Icons.schedule, 'Гибкий график',
+                      'Работайте когда удобно, откуда удобно',
+                      AppColors.primary),
+                  _buildBenefit(context, Icons.trending_up, 'Карьерный рост',
+                      'Развивайте навыки и повышайте рейтинг',
+                      AppColors.purple),
+                  _buildBenefit(context, Icons.shield, 'Безопасные сделки',
+                      'Гарантия оплаты через платформу', AppColors.success),
 
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () => context.push(AppRoutes.expertApplication),
-              child: const Text('Подать заявку'),
+                  const SizedBox(height: 32),
+                  FilledButton(
+                    onPressed: () => context.push(AppRoutes.expertApplication),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.orange,
+                      foregroundColor: AppColors.grey700,
+                    ),
+                    child: const Text('Подать заявку'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -53,19 +78,19 @@ class BecomeExpertScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBenefit(
-      BuildContext context, IconData icon, String title, String subtitle) {
+  Widget _buildBenefit(BuildContext context, IconData icon, String title,
+      String subtitle, Color color) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(14),
             ),
-            child: Icon(icon, color: AppColors.primary),
+            child: Icon(icon, color: color),
           ),
           const SizedBox(width: 16),
           Expanded(
