@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:oko_znaniy_mobile/config/theme.dart';
-import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
 import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
 
 class ExpertApplicationViewScreen extends StatefulWidget {
@@ -52,7 +51,6 @@ class _ExpertApplicationViewScreenState extends State<ExpertApplicationViewScree
   @override
   Widget build(BuildContext context) {
     final testData = context.watch<TestDataProvider>();
-    final authProvider = context.watch<AuthProvider>();
     final application = testData.expertApplication;
 
     if (application == null) {
@@ -77,11 +75,11 @@ class _ExpertApplicationViewScreenState extends State<ExpertApplicationViewScree
       appBar: AppBar(
         title: const Text('Анкета эксперта'),
         actions: [
-          if (!_isEditing && application?.status != 'approved')
+          if (!_isEditing && application.status != 'approved')
             IconButton(icon: const Icon(Icons.edit_outlined), onPressed: () => setState(() => _isEditing = true)),
         ],
       ),
-      body: _isEditing ? _buildEditForm(context) : _buildViewMode(context, application!),
+      body: _isEditing ? _buildEditForm(context) : _buildViewMode(context, application),
     );
   }
 
@@ -206,6 +204,20 @@ class _ExpertApplicationViewScreenState extends State<ExpertApplicationViewScree
               Expanded(
                 child: FilledButton(
                   onPressed: () {
+                    final testData = context.read<TestDataProvider>();
+                    final old = testData.expertApplication;
+                    testData.updateExpertApplication(ExpertApplication(
+                      id: old?.id ?? DateTime.now().millisecondsSinceEpoch,
+                      fullName: _fullNameController.text,
+                      experienceYears: int.tryParse(_experienceController.text) ?? 0,
+                      subjects: List.from(_selectedSubjects),
+                      university: _universityController.text,
+                      graduationYears: _yearsController.text,
+                      degree: _degreeController.text,
+                      status: old?.status ?? 'pending',
+                      rejectionReason: old?.rejectionReason,
+                      createdAt: old?.createdAt ?? DateTime.now(),
+                    ));
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Анкета сохранена')));
                     setState(() => _isEditing = false);
                   },

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:oko_znaniy_mobile/config/theme.dart';
 import 'package:oko_znaniy_mobile/models/order.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
+import 'package:oko_znaniy_mobile/providers/orders_provider.dart';
 import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
 import 'package:intl/intl.dart';
 
@@ -55,7 +56,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  void _handleSubmit() {
+  Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_deadline == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Укажите дату сдачи')));
@@ -82,10 +83,24 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
         clientName: 'Иван Иванов',
       );
       testData.addOrder(order);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заказ успешно создан!')));
+      context.pop();
+    } else {
+      final provider = context.read<OrdersProvider>();
+      final success = await provider.createOrder({
+        'title': _titleController.text,
+        'description': _descriptionController.text,
+        'work_type': _workType,
+        'subject': _subject,
+        if (_budgetController.text.isNotEmpty)
+          'budget': double.parse(_budgetController.text),
+        if (_deadline != null) 'deadline': _deadline!.toIso8601String(),
+      });
+      if (success && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заказ успешно создан!')));
+        context.pop();
+      }
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Заказ успешно создан!')));
-    context.pop();
   }
 
   @override

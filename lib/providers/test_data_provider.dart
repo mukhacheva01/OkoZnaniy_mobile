@@ -817,6 +817,12 @@ class TestDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Expert application
+  void updateExpertApplication(ExpertApplication application) {
+    _expertApplication = application;
+    notifyListeners();
+  }
+
   // Shop works
   void addShopWork(ShopWork work) {
     _shopWorks.insert(0, work);

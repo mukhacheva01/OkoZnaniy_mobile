@@ -111,6 +111,22 @@ class User {
       'is_expert': isExpert,
       'is_partner': isPartner,
       'referral_code': referralCode,
+      'rating': rating,
+      'completed_orders': completedOrders,
+      'active_orders': activeOrders,
+      'total_orders': totalOrders,
+      'total_spent': totalSpent,
+      'email_verified': emailVerified,
+      'bio': bio,
+      'education': education,
+      'experience_years': experienceYears,
+      'hourly_rate': hourlyRate,
+      'skills': skills,
+      'portfolio_url': portfolioUrl,
+      'verification_status': verificationStatus,
+      'total_earnings': totalEarnings,
+      'total_reviews': totalReviews,
+      'avg_response_time': avgResponseTime,
     };
   }
 
