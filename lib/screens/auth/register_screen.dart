@@ -21,7 +21,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _referralCodeController = TextEditingController();
   String _selectedRole = 'client';
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
   bool _agreeToTerms = false;
+  bool _agreeToPrivacy = false;
 
   @override
   void dispose() {
@@ -35,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
-    if (!_agreeToTerms) {
+    if (!_agreeToTerms || !_agreeToPrivacy) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Необходимо принять условия использования')),
@@ -57,7 +59,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Регистрация успешна! Проверьте email для подтверждения.')),
+            content:
+                Text('Регистрация успешна! Проверьте email для подтверждения.')),
       );
       context.go(AppRoutes.login);
     }
@@ -71,192 +74,331 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go(AppRoutes.landing),
+          onPressed: () => context.go(AppRoutes.login),
+        ),
+        title: Text(
+          'Око Знаний',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Регистрация',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Создайте аккаунт для начала работы',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                ),
-                const SizedBox(height: 32),
-
-                if (authProvider.error != null) ...[
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.error.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      authProvider.error!,
-                      style: const TextStyle(color: AppColors.error),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-
-                // Role selector
-                Text('Я хочу:', style: Theme.of(context).textTheme.titleSmall),
-                const SizedBox(height: 8),
-                SegmentedButton<String>(
-                  segments: const [
-                    ButtonSegment(
-                      value: 'client',
-                      label: Text('Заказать работу'),
-                      icon: Icon(Icons.school),
-                    ),
-                    ButtonSegment(
-                      value: 'expert',
-                      label: Text('Стать экспертом'),
-                      icon: Icon(Icons.work),
-                    ),
-                  ],
-                  selected: {_selectedRole},
-                  onSelectionChanged: (value) =>
-                      setState(() => _selectedRole = value.first),
-                ),
-                const SizedBox(height: 24),
-
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введите email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Введите корректный email';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Имя пользователя',
-                    prefixIcon: Icon(Icons.person_outline),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введите имя пользователя';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Пароль',
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.length < 8) {
-                      return 'Пароль должен быть не менее 8 символов';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Подтвердите пароль',
-                    prefixIcon: Icon(Icons.lock_outlined),
-                  ),
-                  validator: (value) {
-                    if (value != _passwordController.text) {
-                      return 'Пароли не совпадают';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _referralCodeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Реферальный код (необязательно)',
-                    prefixIcon: Icon(Icons.card_giftcard),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                CheckboxListTile(
-                  value: _agreeToTerms,
-                  onChanged: (value) =>
-                      setState(() => _agreeToTerms = value ?? false),
-                  title: const Text(
-                    'Я принимаю условия использования и политику конфиденциальности',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                const SizedBox(height: 24),
-
-                ElevatedButton(
-                  onPressed: authProvider.isLoading ? null : _handleRegister,
-                  child: authProvider.isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text('Зарегистрироваться'),
-                ),
-                const SizedBox(height: 16),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        children: [
+          // Content
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text('Уже есть аккаунт?'),
-                    TextButton(
-                      onPressed: () => context.go(AppRoutes.login),
-                      child: const Text('Войти'),
+                    Text(
+                      'Зарегистрироваться',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    if (authProvider.error != null) ...[
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: AppColors.error.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          authProvider.error!,
+                          style: const TextStyle(color: AppColors.error),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
+                    // Email
+                    const Text('Email',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 6),
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                        hintText: 'Email',
+                        prefixIcon: Icon(Icons.email_outlined),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Введите email';
+                        }
+                        if (!value.contains('@')) {
+                          return 'Введите корректный email';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Password
+                    const Text('Пароль',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 6),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        hintText: 'Пароль',
+                        prefixIcon: const Icon(Icons.lock_outlined),
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () => setState(
+                              () => _obscurePassword = !_obscurePassword),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.length < 8) {
+                          return 'Пароль должен быть не менее 8 символов';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Confirm password
+                    const Text('Подтвердите пароль',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 6),
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      decoration: InputDecoration(
+                        hintText: 'Подтвердите пароль',
+                        prefixIcon: const Icon(Icons.lock_outlined),
+                        suffixIcon: IconButton(
+                          icon: Icon(_obscureConfirmPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () => setState(() =>
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value != _passwordController.text) {
+                          return 'Пароли не совпадают';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Role selector
+                    const Text('Роль',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () =>
+                                setState(() => _selectedRole = 'client'),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              decoration: BoxDecoration(
+                                color: _selectedRole == 'client'
+                                    ? AppColors.primary
+                                    : AppColors.background,
+                                borderRadius: BorderRadius.circular(64),
+                                border: Border.all(
+                                  color: _selectedRole == 'client'
+                                      ? AppColors.primary
+                                      : AppColors.border,
+                                ),
+                              ),
+                              child: Text(
+                                'Клиент',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: _selectedRole == 'client'
+                                      ? Colors.white
+                                      : AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () =>
+                                setState(() => _selectedRole = 'expert'),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              decoration: BoxDecoration(
+                                color: _selectedRole == 'expert'
+                                    ? AppColors.primary
+                                    : AppColors.background,
+                                borderRadius: BorderRadius.circular(64),
+                                border: Border.all(
+                                  color: _selectedRole == 'expert'
+                                      ? AppColors.primary
+                                      : AppColors.border,
+                                ),
+                              ),
+                              child: Text(
+                                'Исполнитель',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: _selectedRole == 'expert'
+                                      ? Colors.white
+                                      : AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Referral code
+                    const Text('Реферальный код (необязательно)',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 6),
+                    TextFormField(
+                      controller: _referralCodeController,
+                      decoration: const InputDecoration(
+                        hintText: 'Реферальный код',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Checkboxes
+                    CheckboxListTile(
+                      value: _agreeToPrivacy,
+                      onChanged: (value) =>
+                          setState(() => _agreeToPrivacy = value ?? false),
+                      title: Text.rich(
+                        TextSpan(
+                          children: [
+                            const TextSpan(
+                                text:
+                                    'Я предоставляю своё согласие на '),
+                            TextSpan(
+                              text: 'обработку персональных данных',
+                              style: TextStyle(color: AppColors.primary),
+                            ),
+                          ],
+                        ),
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
+                    CheckboxListTile(
+                      value: _agreeToTerms,
+                      onChanged: (value) =>
+                          setState(() => _agreeToTerms = value ?? false),
+                      title: Text.rich(
+                        TextSpan(
+                          children: [
+                            const TextSpan(text: 'Я принимаю '),
+                            TextSpan(
+                              text: 'пользовательское соглашение',
+                              style: TextStyle(color: AppColors.primary),
+                            ),
+                          ],
+                        ),
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Register button
+                    ElevatedButton(
+                      onPressed:
+                          authProvider.isLoading ? null : _handleRegister,
+                      child: authProvider.isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text('Зарегистрироваться'),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Social login
+                    Text(
+                      'или войти через',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildSocialButton('assets/icons/telegram.png'),
+                        const SizedBox(width: 16),
+                        _buildSocialButton('assets/icons/vk.png'),
+                        const SizedBox(width: 16),
+                        _buildSocialButton('assets/icons/google.png'),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Уже есть аккаунт?'),
+                        TextButton(
+                          onPressed: () => context.go(AppRoutes.login),
+                          child: const Text('Войти'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocialButton(String assetPath) {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.border),
+      ),
+      child: ClipOval(
+        child: Image.asset(
+          assetPath,
+          width: 28,
+          height: 28,
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) =>
+              const Icon(Icons.public, size: 28),
         ),
       ),
     );

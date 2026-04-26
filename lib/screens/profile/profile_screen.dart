@@ -24,154 +24,216 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Avatar & info
-            CircleAvatar(
-              radius: 48,
-              backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-              child: user?.avatar != null
-                  ? ClipOval(
-                      child: Image.network(
-                        user!.avatar!,
-                        width: 96,
-                        height: 96,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.person, size: 48, color: AppColors.primary),
-                      ),
-                    )
-                  : const Icon(Icons.person, size: 48, color: AppColors.primary),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              user?.displayName ?? 'Пользователь',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              user?.email ?? '',
-              style: TextStyle(color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: 8),
+            // Profile header with gradient
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                _roleLabel(user?.role ?? 'client'),
-                style: const TextStyle(
-                    color: AppColors.primary, fontWeight: FontWeight.w500),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Stats
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildStat(context, '${user?.completedOrders ?? 0}', 'Заказов'),
-                _buildStat(
-                    context, user?.rating.toStringAsFixed(1) ?? '0.0', 'Рейтинг'),
-                _buildStat(
-                    context,
-                    '${user?.balance.toStringAsFixed(0) ?? "0"} \u20BD',
-                    'Баланс'),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            const Divider(),
-
-            // Menu items
-            _buildMenuItem(
-              context,
-              Icons.edit_outlined,
-              'Редактировать профиль',
-              () => context.push(AppRoutes.editProfile),
-            ),
-            _buildMenuItem(
-              context,
-              Icons.notifications_outlined,
-              'Уведомления',
-              () => context.push(AppRoutes.notifications),
-            ),
-            _buildMenuItem(
-              context,
-              Icons.shopping_bag_outlined,
-              'Купленные работы',
-              () => context.push(AppRoutes.purchasedWorks),
-            ),
-            _buildMenuItem(
-              context,
-              Icons.support_agent,
-              'Поддержка',
-              () => context.push(AppRoutes.supportCenter),
-            ),
-            _buildMenuItem(
-              context,
-              Icons.school_outlined,
-              'База знаний',
-              () => context.push(AppRoutes.knowledgePortal),
-            ),
-            if (user?.role == 'expert')
-              _buildMenuItem(
-                context,
-                Icons.dashboard_outlined,
-                'Панель эксперта',
-                () => context.push(AppRoutes.expertDashboard),
-              ),
-            if (user?.isPartner == true)
-              _buildMenuItem(
-                context,
-                Icons.handshake_outlined,
-                'Партнерская программа',
-                () => context.push(AppRoutes.partnerDashboard),
-              ),
-            if (user?.role != 'expert')
-              _buildMenuItem(
-                context,
-                Icons.star_outline,
-                'Стать экспертом',
-                () => context.push(AppRoutes.becomeExpert),
-              ),
-            if (user?.isPartner != true)
-              _buildMenuItem(
-                context,
-                Icons.handshake_outlined,
-                'Стать партнером',
-                () => context.push(AppRoutes.becomePartner),
-              ),
-            if (user?.referralCode != null)
-              _buildMenuItem(
-                context,
-                Icons.card_giftcard,
-                'Реферальная программа',
-                () {
-                  // TODO: share referral code
-                },
-                trailing: Text(
-                  user!.referralCode!,
-                  style: TextStyle(
-                      color: AppColors.primary, fontWeight: FontWeight.w500),
+                gradient: AppColors.primaryGradient,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
                 ),
               ),
-            const Divider(),
-            _buildMenuItem(
-              context,
-              Icons.logout,
-              'Выйти',
-              () async {
-                await authProvider.logout();
-                if (context.mounted) context.go(AppRoutes.login);
-              },
-              color: AppColors.error,
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundColor: Colors.white.withValues(alpha: 0.2),
+                    child: user?.avatar != null
+                        ? ClipOval(
+                            child: Image.network(
+                              user!.avatar!,
+                              width: 96,
+                              height: 96,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.person,
+                                      size: 48, color: Colors.white),
+                            ),
+                          )
+                        : const Icon(Icons.person,
+                            size: 48, color: Colors.white),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    user?.displayName ?? 'Пользователь',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    user?.email ?? '',
+                    style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8)),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(64),
+                    ),
+                    child: Text(
+                      _roleLabel(user?.role ?? 'client'),
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Stats
+            Transform.translate(
+              offset: const Offset(0, -20),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStat(context, '${user?.completedOrders ?? 0}',
+                        'Заказов', AppColors.primary),
+                    Container(
+                        width: 1, height: 32, color: AppColors.divider),
+                    _buildStat(
+                        context,
+                        user?.rating.toStringAsFixed(1) ?? '0.0',
+                        'Рейтинг',
+                        AppColors.orange),
+                    Container(
+                        width: 1, height: 32, color: AppColors.divider),
+                    _buildStat(
+                        context,
+                        '${user?.balance.toStringAsFixed(0) ?? "0"} \u20BD',
+                        'Баланс',
+                        AppColors.success),
+                  ],
+                ),
+              ),
+            ),
+
+            // Menu items
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  _buildMenuItem(
+                    context,
+                    Icons.edit_outlined,
+                    'Редактировать профиль',
+                    () => context.push(AppRoutes.editProfile),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.notifications_outlined,
+                    'Уведомления',
+                    () => context.push(AppRoutes.notifications),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.shopping_bag_outlined,
+                    'Купленные работы',
+                    () => context.push(AppRoutes.purchasedWorks),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.support_agent,
+                    'Поддержка',
+                    () => context.push(AppRoutes.supportCenter),
+                  ),
+                  _buildMenuItem(
+                    context,
+                    Icons.school_outlined,
+                    'База знаний',
+                    () => context.push(AppRoutes.knowledgePortal),
+                  ),
+                  if (user?.role == 'expert')
+                    _buildMenuItem(
+                      context,
+                      Icons.dashboard_outlined,
+                      'Панель эксперта',
+                      () => context.push(AppRoutes.expertDashboard),
+                    ),
+                  if (user?.isPartner == true)
+                    _buildMenuItem(
+                      context,
+                      Icons.handshake_outlined,
+                      'Партнерская программа',
+                      () => context.push(AppRoutes.partnerDashboard),
+                    ),
+                  if (user?.role != 'expert')
+                    _buildMenuItem(
+                      context,
+                      Icons.star_outline,
+                      'Стать экспертом',
+                      () => context.push(AppRoutes.becomeExpert),
+                      iconColor: AppColors.orange,
+                    ),
+                  if (user?.isPartner != true)
+                    _buildMenuItem(
+                      context,
+                      Icons.handshake_outlined,
+                      'Стать партнером',
+                      () => context.push(AppRoutes.becomePartner),
+                      iconColor: AppColors.purple,
+                    ),
+                  if (user?.referralCode != null)
+                    _buildMenuItem(
+                      context,
+                      Icons.card_giftcard,
+                      'Реферальная программа',
+                      () {},
+                      trailing: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(64),
+                        ),
+                        child: Text(
+                          user!.referralCode!,
+                          style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12),
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 8),
+                  const Divider(),
+                  _buildMenuItem(
+                    context,
+                    Icons.logout,
+                    'Выйти',
+                    () async {
+                      await authProvider.logout();
+                      if (context.mounted) context.go(AppRoutes.login);
+                    },
+                    iconColor: AppColors.error,
+                    titleColor: AppColors.error,
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ],
         ),
@@ -179,17 +241,20 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStat(BuildContext context, String value, String label) {
+  Widget _buildStat(
+      BuildContext context, String value, String label, Color color) {
     return Column(
       children: [
         Text(
           value,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
         ),
-        Text(label, style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+        const SizedBox(height: 2),
+        Text(label,
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 12)),
       ],
     );
   }
@@ -199,14 +264,30 @@ class ProfileScreen extends StatelessWidget {
     IconData icon,
     String title,
     VoidCallback onTap, {
-    Color? color,
+    Color? iconColor,
+    Color? titleColor,
     Widget? trailing,
   }) {
-    return ListTile(
-      leading: Icon(icon, color: color ?? AppColors.textPrimary),
-      title: Text(title, style: TextStyle(color: color)),
-      trailing: trailing ?? const Icon(Icons.chevron_right),
-      onTap: onTap,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color:
+                (iconColor ?? AppColors.textPrimary).withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: iconColor ?? AppColors.textPrimary, size: 20),
+        ),
+        title: Text(title, style: TextStyle(color: titleColor, fontSize: 15)),
+        trailing: trailing ?? const Icon(Icons.chevron_right, size: 20),
+        onTap: onTap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
     );
   }
 

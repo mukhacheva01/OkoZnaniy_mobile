@@ -32,8 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.visibility, color: AppColors.primary),
+            Image.asset('assets/images/logo.png', height: 32,
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.visibility, color: AppColors.primary)),
             const SizedBox(width: 8),
             const Text('Око Знаний'),
           ],
@@ -61,10 +64,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 margin: const EdgeInsets.all(16),
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryDark],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
+                  gradient: AppColors.primaryGradient,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,20 +96,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 16),
                     if (user?.role == 'client' || user?.role == null)
-                      ElevatedButton(
+                      FilledButton(
                         onPressed: () => context.push(AppRoutes.createOrder),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: AppColors.primary,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.orange,
+                          foregroundColor: AppColors.grey700,
                         ),
                         child: const Text('Создать заказ'),
                       )
                     else if (user?.role == 'expert')
-                      ElevatedButton(
+                      FilledButton(
                         onPressed: () => context.go(AppRoutes.ordersFeed),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: AppColors.primary,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.orange,
+                          foregroundColor: AppColors.grey700,
                         ),
                         child: const Text('Найти заказы'),
                       ),
@@ -130,30 +138,35 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       Icons.add_circle_outline,
                       'Новый заказ',
+                      AppColors.primary,
                       () => context.push(AppRoutes.createOrder),
                     ),
                     _buildQuickAction(
                       context,
                       Icons.store_outlined,
                       'Магазин работ',
+                      AppColors.orange,
                       () => context.go(AppRoutes.shop),
                     ),
                     _buildQuickAction(
                       context,
                       Icons.school_outlined,
                       'База знаний',
+                      AppColors.purple,
                       () => context.push(AppRoutes.knowledgePortal),
                     ),
                     _buildQuickAction(
                       context,
                       Icons.support_agent,
                       'Поддержка',
+                      AppColors.success,
                       () => context.push(AppRoutes.supportCenter),
                     ),
                     _buildQuickAction(
                       context,
                       Icons.star_outline,
                       'Стать экспертом',
+                      AppColors.orangeActive,
                       () => context.push(AppRoutes.becomeExpert),
                     ),
                   ],
@@ -193,11 +206,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       children: [
                         Icon(Icons.assignment_outlined,
-                            size: 48, color: AppColors.textSecondary.withValues(alpha: 0.5)),
+                            size: 48,
+                            color: AppColors.textTertiary),
                         const SizedBox(height: 8),
                         Text(
                           'Пока нет заказов',
                           style: TextStyle(color: AppColors.textSecondary),
+                        ),
+                        const SizedBox(height: 16),
+                        FilledButton.icon(
+                          onPressed: () =>
+                              context.push(AppRoutes.createOrder),
+                          icon: const Icon(Icons.add),
+                          label: const Text('Создать первый заказ'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.orange,
+                            foregroundColor: AppColors.grey700,
+                          ),
                         ),
                       ],
                     ),
@@ -207,8 +232,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount:
-                      ordersProvider.orders.length > 5 ? 5 : ordersProvider.orders.length,
+                  itemCount: ordersProvider.orders.length > 5
+                      ? 5
+                      : ordersProvider.orders.length,
                   itemBuilder: (context, index) {
                     return OrderCard(order: ordersProvider.orders[index]);
                   },
@@ -222,30 +248,33 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildQuickAction(
-      BuildContext context, IconData icon, String label, VoidCallback onTap) {
+  Widget _buildQuickAction(BuildContext context, IconData icon, String label,
+      Color color, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           width: 90,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.divider),
+            color: color.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: color.withValues(alpha: 0.2)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: AppColors.primary, size: 28),
+              Icon(icon, color: color, size: 28),
               const SizedBox(height: 8),
               Text(
                 label,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimary),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
