@@ -4,6 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:oko_znaniy_mobile/config/theme.dart';
 import 'package:oko_znaniy_mobile/config/routes.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
+import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/admin_test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/director_test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/partner_test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/notifications_provider.dart';
+import 'package:oko_znaniy_mobile/providers/catalog_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -197,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Align(
                           alignment: Alignment.centerLeft,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () => context.go(AppRoutes.passwordReset),
                             style: TextButton.styleFrom(
                               foregroundColor: AppColors.primary,
                               padding: EdgeInsets.zero,
@@ -239,17 +245,123 @@ class _LoginScreenState extends State<LoginScreen>
                           children: [
                             _buildSocialButton(
                               'assets/icons/telegram.png',
-                              () {},
+                              () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Авторизация через Telegram...'))),
+                              'Telegram',
                             ),
                             const SizedBox(width: 16),
                             _buildSocialButton(
                               'assets/icons/vk.png',
-                              () {},
+                              () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Авторизация через VK...'))),
+                              'VK',
                             ),
                             const SizedBox(width: 16),
                             _buildSocialButton(
                               'assets/icons/google.png',
-                              () {},
+                              () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Авторизация через Google...'))),
+                              'Google',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        const Divider(),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'client');
+                                  context.read<TestDataProvider>().initTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('client');
+                                  context.read<CatalogProvider>().initTestData();
+                                  context.go(AppRoutes.home);
+                                },
+                                icon: const Icon(Icons.person_outline),
+                                label: const Text('Клиент'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: AppColors.primary,
+                                  side: const BorderSide(color: AppColors.primary),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'expert');
+                                  context.read<TestDataProvider>().initTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('expert');
+                                  context.read<CatalogProvider>().initTestData();
+                                  context.go(AppRoutes.home);
+                                },
+                                icon: const Icon(Icons.school_outlined),
+                                label: const Text('Эксперт'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFFFFB34A),
+                                  side: const BorderSide(color: Color(0xFFFFB34A)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'admin');
+                                  context.read<AdminTestDataProvider>().initAdminTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('admin');
+                                  context.go(AppRoutes.adminDashboard);
+                                },
+                                icon: const Icon(Icons.admin_panel_settings_outlined),
+                                label: const Text('Админ', style: TextStyle(fontSize: 12)),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFFE53935),
+                                  side: const BorderSide(color: Color(0xFFE53935)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'director');
+                                  context.read<AdminTestDataProvider>().initAdminTestData();
+                                  context.read<DirectorTestDataProvider>().initDirectorTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('director');
+                                  context.go(AppRoutes.directorDashboard);
+                                },
+                                icon: const Icon(Icons.business_outlined),
+                                label: const Text('Директор', style: TextStyle(fontSize: 12)),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFF7B1FA2),
+                                  side: const BorderSide(color: Color(0xFF7B1FA2)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'partner');
+                                  context.read<PartnerTestDataProvider>().initPartnerTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('partner');
+                                  context.go(AppRoutes.partnerDashboard);
+                                },
+                                icon: const Icon(Icons.handshake_outlined),
+                                label: const Text('Партнёр', style: TextStyle(fontSize: 12)),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFF2E7D32),
+                                  side: const BorderSide(color: Color(0xFF2E7D32)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -265,7 +377,7 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildSocialButton(String assetPath, VoidCallback onTap) {
+  Widget _buildSocialButton(String assetPath, VoidCallback onTap, [String? label]) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(24),

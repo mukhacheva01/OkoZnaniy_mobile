@@ -6,6 +6,8 @@ class ChatRoom {
   final DateTime? lastMessageAt;
   final int unreadCount;
   final List<ChatParticipant> participants;
+  final bool isFrozen;
+  final String? frozenReason;
 
   ChatRoom({
     required this.id,
@@ -15,6 +17,8 @@ class ChatRoom {
     this.lastMessageAt,
     this.unreadCount = 0,
     this.participants = const [],
+    this.isFrozen = false,
+    this.frozenReason,
   });
 
   factory ChatRoom.fromJson(Map<String, dynamic> json) {
@@ -27,6 +31,8 @@ class ChatRoom {
           ? DateTime.tryParse(json['last_message_at'] as String)
           : null,
       unreadCount: json['unread_count'] as int? ?? 0,
+      isFrozen: json['is_frozen'] as bool? ?? false,
+      frozenReason: json['frozen_reason'] as String?,
       participants: (json['participants'] as List<dynamic>?)
               ?.map((e) =>
                   ChatParticipant.fromJson(e as Map<String, dynamic>))
