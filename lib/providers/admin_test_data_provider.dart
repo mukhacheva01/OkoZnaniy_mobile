@@ -203,7 +203,7 @@ class AdminTestDataProvider extends ChangeNotifier {
   void unblockUser(int id) {
     final index = _users.indexWhere((u) => u.id == id);
     if (index != -1) {
-      _users[index] = _users[index].copyWith(isBlocked: false, blockReason: '');
+      _users[index] = _users[index].copyWith(isBlocked: false, clearBlockReason: true);
       notifyListeners();
     }
   }
@@ -231,7 +231,7 @@ class AdminTestDataProvider extends ChangeNotifier {
   void unbanUserForContacts(int id) {
     final index = _users.indexWhere((u) => u.id == id);
     if (index != -1) {
-      _users[index] = _users[index].copyWith(isContactBanned: false, contactBanReason: '', contactBanUntil: DateTime(1970));
+      _users[index] = _users[index].copyWith(isContactBanned: false, clearContactBanReason: true, clearContactBanUntil: true);
       notifyListeners();
     }
   }

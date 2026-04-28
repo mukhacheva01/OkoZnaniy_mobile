@@ -88,7 +88,10 @@ class AdminUser {
     String? role,
     bool? isContactBanned,
     DateTime? contactBanUntil,
+    bool clearContactBanUntil = false,
     String? contactBanReason,
+    bool clearContactBanReason = false,
+    bool clearBlockReason = false,
   }) {
     return AdminUser(
       id: id,
@@ -96,12 +99,12 @@ class AdminUser {
       email: email,
       role: role ?? this.role,
       isBlocked: isBlocked ?? this.isBlocked,
-      blockReason: blockReason ?? this.blockReason,
+      blockReason: clearBlockReason ? null : (blockReason ?? this.blockReason),
       createdAt: createdAt,
       ordersCount: ordersCount,
       isContactBanned: isContactBanned ?? this.isContactBanned,
-      contactBanUntil: contactBanUntil ?? this.contactBanUntil,
-      contactBanReason: contactBanReason ?? this.contactBanReason,
+      contactBanUntil: clearContactBanUntil ? null : (contactBanUntil ?? this.contactBanUntil),
+      contactBanReason: clearContactBanReason ? null : (contactBanReason ?? this.contactBanReason),
     );
   }
 }

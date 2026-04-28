@@ -6,6 +6,7 @@ import 'package:oko_znaniy_mobile/config/routes.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
 import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
 import 'package:oko_znaniy_mobile/providers/admin_test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/director_test_data_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -320,7 +321,8 @@ class _LoginScreenState extends State<LoginScreen>
                                 onPressed: () {
                                   context.read<AuthProvider>().loginAsTestUser(role: 'director');
                                   context.read<AdminTestDataProvider>().initAdminTestData();
-                                  context.go(AppRoutes.adminDashboard);
+                                  context.read<DirectorTestDataProvider>().initDirectorTestData();
+                                  context.go(AppRoutes.directorDashboard);
                                 },
                                 icon: const Icon(Icons.business_outlined),
                                 label: const Text('Директор', style: TextStyle(fontSize: 12)),

@@ -169,7 +169,7 @@ class AuthProvider extends ChangeNotifier {
       role: role,
       phone: '+7 (999) 123-45-67',
       balance: balance,
-      frozenBalance: isExpert ? 0 : (isPartner ? 0 : 3500),
+      frozenBalance: (isExpert || isAdmin || isDirector || isPartner) ? 0 : 3500,
       isExpert: isExpert,
       isPartner: isPartner,
       referralCode: isPartner ? 'PARTNER2026' : 'TEST123',

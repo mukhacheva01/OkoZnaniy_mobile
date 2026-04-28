@@ -38,6 +38,7 @@ import 'package:oko_znaniy_mobile/screens/expert/expert_shop_works_screen.dart';
 import 'package:oko_znaniy_mobile/screens/partner/partner_dashboard_screen.dart';
 import 'package:oko_znaniy_mobile/screens/partner/become_partner_screen.dart';
 import 'package:oko_znaniy_mobile/screens/admin/admin_dashboard_screen.dart';
+import 'package:oko_znaniy_mobile/screens/director/director_dashboard_screen.dart';
 import 'package:oko_znaniy_mobile/screens/knowledge/knowledge_portal_screen.dart';
 import 'package:oko_znaniy_mobile/screens/knowledge/question_detail_screen.dart';
 import 'package:oko_znaniy_mobile/screens/notifications/notifications_screen.dart';
@@ -94,6 +95,7 @@ class AppRoutes {
   static const String expertFinance = '/expert-finance';
   static const String expertShopWorks = '/expert-shop-works';
   static const String adminDashboard = '/admin';
+  static const String directorDashboard = '/director';
 
   static GoRouter router(AuthProvider authProvider) {
     return GoRouter(
@@ -112,7 +114,8 @@ class AppRoutes {
             state.matchedLocation == register ||
             state.matchedLocation == landing)) {
           final role = authProvider.userRole;
-          if (role == 'admin' || role == 'director') return adminDashboard;
+          if (role == 'admin') return adminDashboard;
+          if (role == 'director') return directorDashboard;
           return home;
         }
         return null;
@@ -213,6 +216,7 @@ class AppRoutes {
         GoRoute(path: expertFinance, builder: (context, state) => const ExpertFinanceScreen()),
         GoRoute(path: expertShopWorks, builder: (context, state) => const ExpertShopWorksScreen()),
         GoRoute(path: adminDashboard, builder: (context, state) => const AdminDashboardScreen()),
+        GoRoute(path: directorDashboard, builder: (context, state) => const DirectorDashboardScreen()),
       ],
     );
   }
