@@ -6,6 +6,7 @@ import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
 import 'package:oko_znaniy_mobile/providers/orders_provider.dart';
 import 'package:oko_znaniy_mobile/providers/chat_provider.dart';
 import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/admin_test_data_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ class OkoZnaniyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
         ChangeNotifierProvider(create: (_) => TestDataProvider()),
+        ChangeNotifierProvider(create: (_) => AdminTestDataProvider()),
       ],
       child: Consumer<AuthProvider>(
         builder: (context, authProvider, _) {

@@ -176,17 +176,20 @@ class FinanceScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               final amount = double.tryParse(controller.text);
-              if (amount != null && amount > 0) {
-                context.read<TestDataProvider>().addTransaction(Transaction(
-                  id: DateTime.now().millisecondsSinceEpoch,
-                  type: 'withdrawal',
-                  amount: -amount,
-                  description: 'Вывод средств',
-                  createdAt: DateTime.now(),
-                ));
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Заявка на вывод ${amount.toStringAsFixed(0)} ₽ создана')));
+              final balance = context.read<AuthProvider>().user?.balance ?? 0;
+              if (amount == null || amount <= 0 || amount > balance) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Некорректная сумма')));
+                return;
               }
+              context.read<TestDataProvider>().addTransaction(Transaction(
+                id: DateTime.now().millisecondsSinceEpoch,
+                type: 'withdrawal',
+                amount: -amount,
+                description: 'Вывод средств',
+                createdAt: DateTime.now(),
+              ));
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Заявка на вывод ${amount.toStringAsFixed(0)} ₽ создана')));
             },
             child: const Text('Вывести'),
           ),

@@ -28,6 +28,8 @@ class _ExpertReviewsScreenState extends State<ExpertReviewsScreen> {
       reviews.sort((a, b) => b.rating.compareTo(a.rating));
     } else if (_sortBy == 'rating_asc') {
       reviews.sort((a, b) => a.rating.compareTo(b.rating));
+    } else {
+      reviews.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     }
 
     final avgRating = testData.expertReviews.isNotEmpty ? testData.expertReviews.map((r) => r.rating).reduce((a, b) => a + b) / testData.expertReviews.length : 0.0;

@@ -5,6 +5,7 @@ import 'package:oko_znaniy_mobile/config/theme.dart';
 import 'package:oko_znaniy_mobile/config/routes.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
 import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/admin_test_data_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -288,6 +289,61 @@ class _LoginScreenState extends State<LoginScreen>
                                 style: OutlinedButton.styleFrom(
                                   foregroundColor: const Color(0xFFFFB34A),
                                   side: const BorderSide(color: Color(0xFFFFB34A)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'admin');
+                                  context.read<AdminTestDataProvider>().initAdminTestData();
+                                  context.go(AppRoutes.adminDashboard);
+                                },
+                                icon: const Icon(Icons.admin_panel_settings_outlined),
+                                label: const Text('Админ', style: TextStyle(fontSize: 12)),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFFE53935),
+                                  side: const BorderSide(color: Color(0xFFE53935)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'director');
+                                  context.read<AdminTestDataProvider>().initAdminTestData();
+                                  context.go(AppRoutes.adminDashboard);
+                                },
+                                icon: const Icon(Icons.business_outlined),
+                                label: const Text('Директор', style: TextStyle(fontSize: 12)),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFF7B1FA2),
+                                  side: const BorderSide(color: Color(0xFF7B1FA2)),
+                                  minimumSize: const Size(0, 48),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  context.read<AuthProvider>().loginAsTestUser(role: 'partner');
+                                  context.read<TestDataProvider>().initTestData();
+                                  context.go(AppRoutes.home);
+                                },
+                                icon: const Icon(Icons.handshake_outlined),
+                                label: const Text('Партнёр', style: TextStyle(fontSize: 12)),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: const Color(0xFF2E7D32),
+                                  side: const BorderSide(color: Color(0xFF2E7D32)),
                                   minimumSize: const Size(0, 48),
                                 ),
                               ),

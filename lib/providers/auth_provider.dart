@@ -141,19 +141,38 @@ class AuthProvider extends ChangeNotifier {
   void loginAsTestUser({String role = 'client'}) {
     _isTestUser = true;
     final isExpert = role == 'expert';
+    final isAdmin = role == 'admin';
+    final isDirector = role == 'director';
+    final isPartner = role == 'partner';
+
+    String email, username, firstName, lastName;
+    double balance;
+
+    if (isAdmin) {
+      email = 'admin@okoznaniy.ru'; username = 'Тестовый админ'; firstName = 'Сергей'; lastName = 'Администратов'; balance = 0;
+    } else if (isDirector) {
+      email = 'director@okoznaniy.ru'; username = 'Тестовый директор'; firstName = 'Дмитрий'; lastName = 'Директоров'; balance = 0;
+    } else if (isPartner) {
+      email = 'partner@okoznaniy.ru'; username = 'Тестовый партнёр'; firstName = 'Анна'; lastName = 'Партнёрова'; balance = 12500;
+    } else if (isExpert) {
+      email = 'expert@okoznaniy.ru'; username = 'Тестовый эксперт'; firstName = 'Алексей'; lastName = 'Петров'; balance = 8500;
+    } else {
+      email = 'client@okoznaniy.ru'; username = 'Тестовый клиент'; firstName = 'Иван'; lastName = 'Иванов'; balance = 1500;
+    }
+
     _user = User(
       id: 0,
-      email: isExpert ? 'expert@okoznaniy.ru' : 'client@okoznaniy.ru',
-      username: isExpert ? 'Тестовый эксперт' : 'Тестовый клиент',
-      firstName: isExpert ? 'Алексей' : 'Иван',
-      lastName: isExpert ? 'Петров' : 'Иванов',
+      email: email,
+      username: username,
+      firstName: firstName,
+      lastName: lastName,
       role: role,
       phone: '+7 (999) 123-45-67',
-      balance: isExpert ? 8500 : 1500,
-      frozenBalance: isExpert ? 0 : 3500,
+      balance: balance,
+      frozenBalance: isExpert ? 0 : (isPartner ? 0 : 3500),
       isExpert: isExpert,
-      isPartner: false,
-      referralCode: 'TEST123',
+      isPartner: isPartner,
+      referralCode: isPartner ? 'PARTNER2026' : 'TEST123',
       rating: isExpert ? 4.9 : 4.8,
       completedOrders: isExpert ? 156 : 8,
       activeOrders: isExpert ? 5 : 3,
@@ -167,7 +186,7 @@ class AuthProvider extends ChangeNotifier {
       skills: isExpert ? ['Экономика', 'Менеджмент', 'Финансовый анализ', 'Бухгалтерский учёт', 'Статистика'] : [],
       portfolioUrl: isExpert ? 'https://portfolio.example.com/petrov' : null,
       verificationStatus: isExpert ? 'verified' : 'none',
-      totalEarnings: isExpert ? 485000 : 0,
+      totalEarnings: isExpert ? 485000 : (isPartner ? 67500 : 0),
       totalReviews: isExpert ? 142 : 0,
       avgResponseTime: isExpert ? '15 мин' : '',
     );
