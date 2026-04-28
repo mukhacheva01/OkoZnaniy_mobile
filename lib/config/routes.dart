@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
 import 'package:oko_znaniy_mobile/screens/auth/login_screen.dart';
 import 'package:oko_znaniy_mobile/screens/auth/register_screen.dart';
+import 'package:oko_znaniy_mobile/screens/auth/password_reset_screen.dart';
+import 'package:oko_znaniy_mobile/screens/auth/email_verification_screen.dart';
 import 'package:oko_znaniy_mobile/screens/home/home_screen.dart';
 import 'package:oko_znaniy_mobile/screens/home/landing_screen.dart';
 import 'package:oko_znaniy_mobile/screens/orders/create_order_screen.dart';
@@ -94,6 +96,8 @@ class AppRoutes {
   static const String expertArbitration = '/expert-arbitration';
   static const String expertFinance = '/expert-finance';
   static const String expertShopWorks = '/expert-shop-works';
+  static const String passwordReset = '/password-reset';
+  static const String emailVerification = '/email-verification';
   static const String adminDashboard = '/admin';
   static const String directorDashboard = '/director';
 
@@ -105,7 +109,8 @@ class AppRoutes {
         final isLoggedIn = authProvider.isAuthenticated;
         final isAuthRoute = state.matchedLocation == login ||
             state.matchedLocation == register ||
-            state.matchedLocation == landing;
+            state.matchedLocation == landing ||
+            state.matchedLocation == passwordReset;
 
         if (!isLoggedIn && !isAuthRoute) {
           return login;
@@ -133,6 +138,14 @@ class AppRoutes {
         GoRoute(
           path: register,
           builder: (context, state) => const RegisterScreen(),
+        ),
+        GoRoute(
+          path: passwordReset,
+          builder: (context, state) => const PasswordResetScreen(),
+        ),
+        GoRoute(
+          path: emailVerification,
+          builder: (context, state) => const EmailVerificationScreen(),
         ),
         ShellRoute(
           builder: (context, state, child) => MainScaffold(child: child),

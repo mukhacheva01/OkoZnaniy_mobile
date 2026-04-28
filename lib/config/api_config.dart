@@ -82,4 +82,55 @@ class ApiEndpoints {
   // Partners
   static const String partnerStats = '/partners/stats/';
   static const String partnerReferrals = '/partners/referrals/';
+  static const String partnerDashboard = '/users/partner_dashboard/';
+  static const String generateReferralLink = '/users/generate_referral_link/';
+  static const String partnersList = '/users/partners_list/';
+
+  // Chat (HTTP)
+  static const String chatChats = '/chat/chats/';
+  static String chatSendMessage(int id) => '/chat/chats/$id/send_message/';
+  static String chatViolations(int id) => '/chat/violations/$id/';
+  static const String chatSupport = '/chat/support/';
+
+  // Catalog
+  static const String catalogSubjects = '/catalog/subjects/';
+  static const String catalogTopics = '/catalog/topics/';
+  static const String catalogWorkTypes = '/catalog/work-types/';
+  static const String catalogComplexity = '/catalog/complexity-levels/';
+  static const String catalogCategories = '/catalog/categories/';
+  static const String catalogSkills = '/catalog/skills/';
+  static const String catalogDiscounts = '/catalog/discounts/';
+
+  // Orders (additional actions)
+  static String orderFreeze(int id) => '/orders/orders/$id/freeze/';
+  static String orderUnfreeze(int id) => '/orders/orders/$id/unfreeze/';
+  static String orderCancel(int id) => '/orders/orders/$id/cancel/';
+  static String orderReactivate(int id) => '/orders/orders/$id/reactivate/';
+  static String orderDeclineBid(int id, int bidId) => '/orders/orders/$id/bids/$bidId/decline/';
+  static String orderAssignExpert(int id) => '/orders/orders/$id/assign_expert/';
+  static String orderDeleteFile(int id, int fileId) => '/orders/orders/$id/files/$fileId/';
+
+  // Disputes
+  static const String disputes = '/orders/disputes/';
+
+  // Shop (purchases)
+  static const String shopPurchases = '/shop/purchases/';
+
+  // Experts
+  static const String expertsMatching = '/experts/matching/';
+  static const String expertSpecializations = '/experts/specializations/';
+  static const String expertDocuments = '/experts/documents/';
+  static const String expertReviews = '/experts/reviews/';
+  static const String expertRatings = '/experts/ratings/';
+  static const String expertStatistics = '/experts/statistics/';
+  static const String expertDashboard = '/experts/dashboard/';
+  static const String expertApplications = '/experts/applications/';
+
+  // OAuth
+  static const String googleCallback = '/users/google/callback/';
+  static const String vkCallback = '/users/vk/callback/';
+
+  // WebSocket
+  static String wsNotifications(String token) => 'wss://okoznaniy.ru/ws/notifications/?token=$token';
+  static String wsChat(int chatId, String token) => 'wss://okoznaniy.ru/ws/chat/$chatId/?token=$token';
 }

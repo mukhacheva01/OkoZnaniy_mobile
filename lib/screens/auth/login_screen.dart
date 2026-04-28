@@ -8,6 +8,8 @@ import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
 import 'package:oko_znaniy_mobile/providers/admin_test_data_provider.dart';
 import 'package:oko_znaniy_mobile/providers/director_test_data_provider.dart';
 import 'package:oko_znaniy_mobile/providers/partner_test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/notifications_provider.dart';
+import 'package:oko_znaniy_mobile/providers/catalog_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -201,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen>
                         Align(
                           alignment: Alignment.centerLeft,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () => context.go(AppRoutes.passwordReset),
                             style: TextButton.styleFrom(
                               foregroundColor: AppColors.primary,
                               padding: EdgeInsets.zero,
@@ -243,17 +245,20 @@ class _LoginScreenState extends State<LoginScreen>
                           children: [
                             _buildSocialButton(
                               'assets/icons/telegram.png',
-                              () {},
+                              () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Авторизация через Telegram...'))),
+                              'Telegram',
                             ),
                             const SizedBox(width: 16),
                             _buildSocialButton(
                               'assets/icons/vk.png',
-                              () {},
+                              () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Авторизация через VK...'))),
+                              'VK',
                             ),
                             const SizedBox(width: 16),
                             _buildSocialButton(
                               'assets/icons/google.png',
-                              () {},
+                              () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Авторизация через Google...'))),
+                              'Google',
                             ),
                           ],
                         ),
@@ -267,6 +272,8 @@ class _LoginScreenState extends State<LoginScreen>
                                 onPressed: () {
                                   context.read<AuthProvider>().loginAsTestUser(role: 'client');
                                   context.read<TestDataProvider>().initTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('client');
+                                  context.read<CatalogProvider>().initTestData();
                                   context.go(AppRoutes.home);
                                 },
                                 icon: const Icon(Icons.person_outline),
@@ -284,6 +291,8 @@ class _LoginScreenState extends State<LoginScreen>
                                 onPressed: () {
                                   context.read<AuthProvider>().loginAsTestUser(role: 'expert');
                                   context.read<TestDataProvider>().initTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('expert');
+                                  context.read<CatalogProvider>().initTestData();
                                   context.go(AppRoutes.home);
                                 },
                                 icon: const Icon(Icons.school_outlined),
@@ -305,6 +314,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 onPressed: () {
                                   context.read<AuthProvider>().loginAsTestUser(role: 'admin');
                                   context.read<AdminTestDataProvider>().initAdminTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('admin');
                                   context.go(AppRoutes.adminDashboard);
                                 },
                                 icon: const Icon(Icons.admin_panel_settings_outlined),
@@ -323,6 +333,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   context.read<AuthProvider>().loginAsTestUser(role: 'director');
                                   context.read<AdminTestDataProvider>().initAdminTestData();
                                   context.read<DirectorTestDataProvider>().initDirectorTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('director');
                                   context.go(AppRoutes.directorDashboard);
                                 },
                                 icon: const Icon(Icons.business_outlined),
@@ -340,6 +351,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 onPressed: () {
                                   context.read<AuthProvider>().loginAsTestUser(role: 'partner');
                                   context.read<PartnerTestDataProvider>().initPartnerTestData();
+                                  context.read<NotificationsProvider>().initTestNotifications('partner');
                                   context.go(AppRoutes.partnerDashboard);
                                 },
                                 icon: const Icon(Icons.handshake_outlined),
@@ -365,7 +377,7 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  Widget _buildSocialButton(String assetPath, VoidCallback onTap) {
+  Widget _buildSocialButton(String assetPath, VoidCallback onTap, [String? label]) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(24),

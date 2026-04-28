@@ -18,6 +18,10 @@ class Order {
   final int commentsCount;
   final int bidsCount;
   final bool hasNewMessages;
+  final bool isFrozen;
+  final String? frozenReason;
+  final String? complexityLevel;
+  final String? topic;
 
   Order({
     required this.id,
@@ -39,6 +43,10 @@ class Order {
     this.commentsCount = 0,
     this.bidsCount = 0,
     this.hasNewMessages = false,
+    this.isFrozen = false,
+    this.frozenReason,
+    this.complexityLevel,
+    this.topic,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -65,6 +73,10 @@ class Order {
       commentsCount: json['comments_count'] as int? ?? 0,
       bidsCount: json['bids_count'] as int? ?? 0,
       hasNewMessages: json['has_new_messages'] as bool? ?? false,
+      isFrozen: json['is_frozen'] as bool? ?? false,
+      frozenReason: json['frozen_reason'] as String?,
+      complexityLevel: json['complexity_level'] as String?,
+      topic: json['topic'] as String?,
     );
   }
 
@@ -81,6 +93,8 @@ class Order {
       'closed': 'Закрыт',
       'cancelled': 'Отменен',
       'dispute': 'Спор',
+      'frozen': 'Заморожен',
+      'overdue': 'Просрочен',
     };
     return labels[status] ?? status;
   }

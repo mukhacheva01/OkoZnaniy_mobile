@@ -45,3 +45,30 @@ class ShopWork {
     );
   }
 }
+
+class ShopPurchase {
+  final int id;
+  final int workId;
+  final String workTitle;
+  final double pricePaid;
+  final DateTime purchasedAt;
+  final String? downloadUrl;
+
+  ShopPurchase({
+    required this.id,
+    required this.workId,
+    required this.workTitle,
+    required this.pricePaid,
+    required this.purchasedAt,
+    this.downloadUrl,
+  });
+
+  factory ShopPurchase.fromJson(Map<String, dynamic> json) => ShopPurchase(
+    id: json['id'] as int,
+    workId: json['work_id'] as int? ?? json['work'] as int? ?? 0,
+    workTitle: json['work_title'] as String? ?? '',
+    pricePaid: (json['price_paid'] as num?)?.toDouble() ?? 0,
+    purchasedAt: DateTime.parse(json['purchased_at'] as String? ?? DateTime.now().toIso8601String()),
+    downloadUrl: json['download_url'] as String?,
+  );
+}

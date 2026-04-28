@@ -29,6 +29,11 @@ class User {
   final double totalEarnings;
   final int totalReviews;
   final String avgResponseTime;
+  // Ban/contact fields
+  final bool isBannedForContacts;
+  final DateTime? contactBanUntil;
+  final String? frozenReason;
+  final bool hasPartnerInfo;
 
   User({
     required this.id,
@@ -60,6 +65,10 @@ class User {
     this.totalEarnings = 0,
     this.totalReviews = 0,
     this.avgResponseTime = '',
+    this.isBannedForContacts = false,
+    this.contactBanUntil,
+    this.frozenReason,
+    this.hasPartnerInfo = false,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -93,6 +102,10 @@ class User {
       totalEarnings: (json['total_earnings'] as num?)?.toDouble() ?? 0,
       totalReviews: json['total_reviews'] as int? ?? 0,
       avgResponseTime: json['avg_response_time'] as String? ?? '',
+      isBannedForContacts: json['is_banned_for_contacts'] as bool? ?? false,
+      contactBanUntil: json['contact_ban_until'] != null ? DateTime.tryParse(json['contact_ban_until'] as String) : null,
+      frozenReason: json['frozen_reason'] as String?,
+      hasPartnerInfo: json['has_partner_info'] as bool? ?? json['partner_info'] != null,
     );
   }
 
@@ -127,6 +140,10 @@ class User {
       'total_earnings': totalEarnings,
       'total_reviews': totalReviews,
       'avg_response_time': avgResponseTime,
+      'is_banned_for_contacts': isBannedForContacts,
+      'contact_ban_until': contactBanUntil?.toIso8601String(),
+      'frozen_reason': frozenReason,
+      'has_partner_info': hasPartnerInfo,
     };
   }
 
@@ -140,4 +157,7 @@ class User {
   double get avgOrderCost => totalOrders > 0 ? totalSpent / totalOrders : 0;
   double get successRate =>
       totalOrders > 0 ? (completedOrders / totalOrders) * 100 : 0;
+
+  bool get isBanExpired => contactBanUntil != null && contactBanUntil!.isBefore(DateTime.now());
+  bool get isEffectivelyBanned => isBannedForContacts && !isBanExpired;
 }

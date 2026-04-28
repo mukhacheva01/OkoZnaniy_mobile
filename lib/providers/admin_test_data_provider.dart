@@ -223,6 +223,7 @@ class AdminTestDataProvider extends ChangeNotifier {
         isContactBanned: true,
         contactBanReason: reason,
         contactBanUntil: days != null ? DateTime.now().add(Duration(days: days)) : null,
+        clearContactBanUntil: days == null,
       );
       notifyListeners();
     }

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:oko_znaniy_mobile/models/user.dart';
 import 'package:oko_znaniy_mobile/services/auth_service.dart';
 import 'package:oko_znaniy_mobile/services/api_service.dart';
+import 'package:oko_znaniy_mobile/config/api_config.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -189,9 +190,66 @@ class AuthProvider extends ChangeNotifier {
       totalEarnings: isExpert ? 485000 : (isPartner ? 67500 : 0),
       totalReviews: isExpert ? 142 : 0,
       avgResponseTime: isExpert ? '15 мин' : '',
+      hasPartnerInfo: isPartner,
     );
     _error = null;
     notifyListeners();
+  }
+
+  // Email verification
+  Future<bool> verifyEmailCode(String code) async {
+    if (_isTestUser) {
+      _user = User(
+        id: _user!.id, email: _user!.email, username: _user!.username,
+        firstName: _user!.firstName, lastName: _user!.lastName, role: _user!.role,
+        phone: _user!.phone, balance: _user!.balance, frozenBalance: _user!.frozenBalance,
+        isExpert: _user!.isExpert, isPartner: _user!.isPartner, referralCode: _user!.referralCode,
+        rating: _user!.rating, completedOrders: _user!.completedOrders, activeOrders: _user!.activeOrders,
+        totalOrders: _user!.totalOrders, totalSpent: _user!.totalSpent, emailVerified: true,
+        bio: _user!.bio, education: _user!.education, experienceYears: _user!.experienceYears,
+        hourlyRate: _user!.hourlyRate, skills: _user!.skills, portfolioUrl: _user!.portfolioUrl,
+        verificationStatus: _user!.verificationStatus, totalEarnings: _user!.totalEarnings,
+        totalReviews: _user!.totalReviews, avgResponseTime: _user!.avgResponseTime,
+        hasPartnerInfo: _user!.hasPartnerInfo,
+      );
+      notifyListeners();
+      return true;
+    }
+    try {
+      await _apiService.post(ApiEndpoints.verifyEmailCode, data: {'code': code});
+      await fetchUser();
+      return true;
+    } catch (e) { return false; }
+  }
+
+  Future<bool> resendVerificationCode() async {
+    if (_isTestUser) return true;
+    try {
+      await _apiService.post(ApiEndpoints.resendVerificationCode, data: {});
+      return true;
+    } catch (e) { return false; }
+  }
+
+  Future<bool> requestPasswordReset(String email) async {
+    try {
+      await _apiService.post(ApiEndpoints.requestPasswordReset, data: {'email': email});
+      return true;
+    } catch (e) { return false; }
+  }
+
+  Future<bool> resetPasswordWithCode(String code, String newPassword) async {
+    try {
+      await _apiService.post(ApiEndpoints.resetPasswordWithCode, data: {'code': code, 'new_password': newPassword});
+      return true;
+    } catch (e) { return false; }
+  }
+
+  Future<bool> changePassword(String oldPassword, String newPassword) async {
+    if (_isTestUser) return true;
+    try {
+      await _apiService.post('/users/change_password/', data: {'old_password': oldPassword, 'new_password': newPassword});
+      return true;
+    } catch (e) { return false; }
   }
 
   void clearError() {

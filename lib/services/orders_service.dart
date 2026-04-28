@@ -99,4 +99,52 @@ class OrdersService {
       data: {'rating': rating, 'text': text},
     );
   }
+
+  Future<void> rejectOrder(int id, {String? reason}) async {
+    await _api.post(ApiEndpoints.orderReject(id), data: {if (reason != null) 'reason': reason});
+  }
+
+  Future<void> freezeOrder(int id) async {
+    await _api.post(ApiEndpoints.orderFreeze(id));
+  }
+
+  Future<void> unfreezeOrder(int id) async {
+    await _api.post(ApiEndpoints.orderUnfreeze(id));
+  }
+
+  Future<void> cancelOrder(int id) async {
+    await _api.post(ApiEndpoints.orderCancel(id));
+  }
+
+  Future<void> reactivateOrder(int id) async {
+    await _api.post(ApiEndpoints.orderReactivate(id));
+  }
+
+  Future<void> extendDeadline(int id, DateTime newDeadline) async {
+    await _api.post(ApiEndpoints.orderExtendDeadline(id), data: {'deadline': newDeadline.toIso8601String()});
+  }
+
+  Future<void> assignExpert(int orderId, int expertId) async {
+    await _api.post(ApiEndpoints.orderAssignExpert(orderId), data: {'expert_id': expertId});
+  }
+
+  Future<void> placeBid(int orderId, {required double amount, int prepayPercent = 0, String? comment}) async {
+    await _api.post(ApiEndpoints.orderBids(orderId), data: {
+      'amount': amount,
+      'prepay_percent': prepayPercent,
+      if (comment != null) 'comment': comment,
+    });
+  }
+
+  Future<void> acceptBid(int orderId, int bidId) async {
+    await _api.post(ApiEndpoints.orderAcceptBid(orderId), data: {'bid_id': bidId});
+  }
+
+  Future<void> declineBid(int orderId, int bidId) async {
+    await _api.post(ApiEndpoints.orderDeclineBid(orderId, bidId));
+  }
+
+  Future<void> deleteFile(int orderId, int fileId) async {
+    await _api.delete(ApiEndpoints.orderDeleteFile(orderId, fileId));
+  }
 }

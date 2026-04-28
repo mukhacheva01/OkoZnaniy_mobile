@@ -12,6 +12,7 @@ import 'package:oko_znaniy_mobile/screens/partner/sections/partner_statistics_se
 import 'package:oko_znaniy_mobile/screens/partner/sections/referrals_section.dart';
 import 'package:oko_znaniy_mobile/screens/partner/sections/partner_earnings_section.dart';
 import 'package:oko_znaniy_mobile/screens/partner/sections/partner_faq_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/become_partner_screen.dart';
 
 class PartnerDashboardScreen extends StatefulWidget {
   const PartnerDashboardScreen({super.key});
@@ -57,6 +58,10 @@ class _PartnerDashboardScreenState extends State<PartnerDashboardScreen> {
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
     final user = authProvider.user;
+
+    if (user != null && !user.hasPartnerInfo) {
+      return const BecomePartnerScreen();
+    }
 
     return Scaffold(
       appBar: AppBar(
