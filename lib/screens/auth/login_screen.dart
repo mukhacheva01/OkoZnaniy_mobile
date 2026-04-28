@@ -7,6 +7,7 @@ import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
 import 'package:oko_znaniy_mobile/providers/test_data_provider.dart';
 import 'package:oko_znaniy_mobile/providers/admin_test_data_provider.dart';
 import 'package:oko_znaniy_mobile/providers/director_test_data_provider.dart';
+import 'package:oko_znaniy_mobile/providers/partner_test_data_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -338,8 +339,8 @@ class _LoginScreenState extends State<LoginScreen>
                               child: OutlinedButton.icon(
                                 onPressed: () {
                                   context.read<AuthProvider>().loginAsTestUser(role: 'partner');
-                                  context.read<TestDataProvider>().initTestData();
-                                  context.go(AppRoutes.home);
+                                  context.read<PartnerTestDataProvider>().initPartnerTestData();
+                                  context.go(AppRoutes.partnerDashboard);
                                 },
                                 icon: const Icon(Icons.handshake_outlined),
                                 label: const Text('Партнёр', style: TextStyle(fontSize: 12)),

@@ -116,6 +116,7 @@ class AppRoutes {
           final role = authProvider.userRole;
           if (role == 'admin') return adminDashboard;
           if (role == 'director') return directorDashboard;
+          if (role == 'partner') return partnerDashboard;
           return home;
         }
         return null;

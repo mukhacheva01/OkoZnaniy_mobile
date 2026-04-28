@@ -1,122 +1,115 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:oko_znaniy_mobile/config/theme.dart';
+import 'package:oko_znaniy_mobile/config/routes.dart';
 import 'package:oko_znaniy_mobile/providers/auth_provider.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/program_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/map_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/promo_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/partner_chats_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/partner_statistics_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/referrals_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/partner_earnings_section.dart';
+import 'package:oko_znaniy_mobile/screens/partner/sections/partner_faq_section.dart';
 
-class PartnerDashboardScreen extends StatelessWidget {
+class PartnerDashboardScreen extends StatefulWidget {
   const PartnerDashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final user = context.watch<AuthProvider>().user;
+  State<PartnerDashboardScreen> createState() => _PartnerDashboardScreenState();
+}
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Партнерская программа')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  const Text('Ваш реферальный код',
-                      style: TextStyle(color: Colors.white70)),
-                  const SizedBox(height: 8),
-                  Text(
-                    user?.referralCode ?? 'Нет кода',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      // TODO: share referral code
-                    },
-                    icon: const Icon(Icons.share, color: Colors.white),
-                    label: const Text('Поделиться',
-                        style: TextStyle(color: Colors.white)),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.white54),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
+class _PartnerDashboardScreenState extends State<PartnerDashboardScreen> {
+  String _selectedMenu = 'program';
 
-            Text('Статистика',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
+  static const _menuItems = [
+    {'key': 'program', 'label': 'Программа', 'icon': Icons.handshake},
+    {'key': 'map', 'label': 'Карта партнёров', 'icon': Icons.map},
+    {'key': 'promo', 'label': 'Промо-материалы', 'icon': Icons.campaign},
+    {'key': 'chats', 'label': 'Коммуникация', 'icon': Icons.chat},
+    {'key': 'statistics', 'label': 'Статистика', 'icon': Icons.bar_chart},
+    {'key': 'referrals', 'label': 'Мои рефералы', 'icon': Icons.people},
+    {'key': 'earnings', 'label': 'Начисления', 'icon': Icons.monetization_on},
+    {'key': 'faq', 'label': 'FAQ', 'icon': Icons.help_outline},
+  ];
 
-            Row(
-              children: [
-                Expanded(child: _buildStatCard(context, '0', 'Рефералов')),
-                const SizedBox(width: 12),
-                Expanded(child: _buildStatCard(context, '0 \u20BD', 'Заработано')),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            Text('Промо-материалы',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.link, color: AppColors.primary),
-                title: const Text('Реферальная ссылка'),
-                subtitle: Text(
-                  'https://okoznaniy.ru/ref/${user?.referralCode ?? ""}',
-                  style: const TextStyle(fontSize: 12),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.copy),
-                  onPressed: () {
-                    // TODO: copy to clipboard
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  Widget _buildSection() {
+    switch (_selectedMenu) {
+      case 'program': return const ProgramSection();
+      case 'map': return const MapSection();
+      case 'promo': return const PromoSection();
+      case 'chats': return const PartnerChatsSection();
+      case 'statistics': return const PartnerStatisticsSection();
+      case 'referrals': return const ReferralsSection();
+      case 'earnings': return const PartnerEarningsSection();
+      case 'faq': return const PartnerFaqSection();
+      default: return const ProgramSection();
+    }
   }
 
-  Widget _buildStatCard(BuildContext context, String value, String label) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+  String _sectionTitle() {
+    final item = _menuItems.firstWhere((m) => m['key'] == _selectedMenu, orElse: () => _menuItems.first);
+    return item['label'] as String;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+    final user = authProvider.user;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_sectionTitle()),
+        backgroundColor: const Color(0xFF2E7D32),
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await authProvider.logout();
+              if (context.mounted) context.go(AppRoutes.login);
+            },
+          ),
+        ],
+      ),
+      drawer: Drawer(
         child: Column(
           children: [
-            Text(value,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 4),
-            Text(label, style: TextStyle(color: AppColors.textSecondary)),
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF43A047)]),
+              ),
+              currentAccountPicture: const CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.handshake, color: Color(0xFF2E7D32), size: 30),
+              ),
+              accountName: Text(user?.username ?? 'Партнёр', style: const TextStyle(fontWeight: FontWeight.bold)),
+              accountEmail: Text(user?.email ?? '', style: const TextStyle(fontSize: 12)),
+            ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: _menuItems.map((item) {
+                  final key = item['key'] as String;
+                  final isSelected = _selectedMenu == key;
+                  return ListTile(
+                    leading: Icon(item['icon'] as IconData, color: isSelected ? const Color(0xFF2E7D32) : AppColors.textSecondary),
+                    title: Text(item['label'] as String, style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal, color: isSelected ? const Color(0xFF2E7D32) : null)),
+                    selected: isSelected,
+                    selectedTileColor: const Color(0xFF2E7D32).withValues(alpha: 0.08),
+                    onTap: () {
+                      setState(() => _selectedMenu = key);
+                      Navigator.pop(context);
+                    },
+                  );
+                }).toList(),
+              ),
+            ),
           ],
         ),
       ),
+      body: _buildSection(),
     );
   }
 }
